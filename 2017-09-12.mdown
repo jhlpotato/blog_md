@@ -1,0 +1,28 @@
+---
+title: 2017-09-12 工作记录
+tags: [dpdk, 日志]
+---
+
+今天回到家，想起了DPDK官方微信的发的一篇文章《DPDK 报文调度/保序 终极解决方案 Event Dev 简介》，
+和这几天项目中抓包模块在Makefile中加上-O2的优化选项后，kni端口启动不起来的故障。
+
+<!-- more -->
+
+1. 首先，来谈谈kni端口启动不起来的问题
+目前经过多次测试，发现端口启动不起来的主要原因是，kni端口和内核的通信机制没有建立起来，就类似TCP的三次握手，就是kni发送请求包，但是内核没有返回响应包。
+所以，在网上找了一篇深入分析kni sample示例程序的文章，但是dpdk版本有点老，没有关系，整体的逻辑框架没有变，包括dpdk二层转发，kni虚接口的建立，和内核的通信过程，
+作者都从代码的级别进行分析，把数据包从网卡的接受到dpdk kni的处理，送到内核，然后数据包从内核到kni再到网卡的过程全部分析了透彻
+
+[dpdk kni exception path](http://www.cnblogs.com/chanwai1219/p/3680239.html)
+
+2. 然后就是想起刚看的文章《DPDK 报文调度/保序 终极解决方案 Event Dev 简介》
+[文章链接](https://mp.weixin.qq.com/s/RemQmgOsxfAgB3-dapjo3w)
+
+这篇文章是dpdk开源社区官方微博推送的一篇文章，讲了报文的处理和调度以及保序的问题。
+
+就阅读了官方的文档《Sample Applications User Guides》中关于DISTRIBUTOR SAMPLE APPLICATION的部分以及EVENTDEV PIPELINE SW PMD SAMPLE APPLICATION部分
+当然少不了对应的官方文档《Programmer’s Guide》中关于PACKET DISTRIBUTOR LIBRARY的部分以及EVENT DEVICE LIBRARY的部分
+
+看到作者使用了event dev的库，看到了17.08中官方文档中有一个文档叫《Event Device Drivers》，主要是将Event Device驱动的部分，大概的浏览了一下，主要是NXP DPAA2 Eventdev Driver和Software Eventdev Poll Mode Driver以及OCTEONTX SSOVF Eventdev Driver三种驱动的特性，前置条件，配置，初始化以及限制。
+
+作者在文章中提到了使用的是Cavium eventdev HW。

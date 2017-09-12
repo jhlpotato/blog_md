@@ -1,0 +1,15 @@
+---
+title: 关于inline的学习笔记
+tags: [inline, C, 学习笔记]
+---
+
+### 前言
+
+在项目中，编译的时候碰到了static定义的函数在inline函数引用的时候出现编译错误
+
+询问同项目的组的同事，同事说，一般inline声明的函数只定义在.h文件中，就算定义在.c文件中，不会有作用
+
+所以自己就找了一篇关于inline的文章来阅读，[文章的链接](http://www.cnblogs.com/cnmaizi/archive/2011/01/19/1939686.html)
+
+
+<!-- more -->
